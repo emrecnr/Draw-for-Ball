@@ -1,28 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class LineController : MonoBehaviour
 {
-    [SerializeField] private GameObject _linePrefab;
-    [SerializeField] private GameObject _line;
+    private LineRenderer _line;
 
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private EdgeCollider2D edgeCollider2D;
+    private LineRenderer lineRenderer;
+    private EdgeCollider2D edgeCollider2D;
 
     [SerializeField] private List<Vector2> touchPositionList;
+    [SerializeField] private List<LineRenderer> currentDrawedLine;
+
+    public System.Action<int> OnDrawLine;
+
+    private int _maxDrawLine = 3;
+    private int _currentDrawLineCount;
+    public int CurrentDrawLineCount => _currentDrawLineCount;
 
     private IInput _input;
     private void Awake()
     {
         _input = new PcInput();
     }
+    private void Start()
+    {
+        _currentDrawLineCount = _maxDrawLine;
+    }
 
     private void Update()
     {
-        if (_input.InputButtonDown)        
+        if (!GameManager.Instance.canStart || _currentDrawLineCount < 0) return;
+        if (_input.InputButtonDown)
             DrawLine();
-        
+
         if (_input.InputButtonMove)
         {
             Vector2 touchPosition = GetScreenPoint();
@@ -32,8 +44,16 @@ public class LineController : MonoBehaviour
     }
     private void DrawLine()
     {
-        _line = Instantiate(_linePrefab, Vector2.zero, Quaternion.identity);
-        lineRenderer = _line.GetComponent<LineRenderer>();
+        if (_maxDrawLine <= 0) return;
+        _currentDrawLineCount--;
+        OnDrawLine?.Invoke(_currentDrawLineCount);
+        
+        _line = LinePool.Instance.Get();
+        _line.transform.position = Vector2.zero;
+        _line.positionCount = 2;
+        _line.gameObject.SetActive(true);
+        currentDrawedLine.Add(_line);
+        lineRenderer = _line;
         edgeCollider2D = _line.GetComponent<EdgeCollider2D>();
         touchPositionList.Clear();
 
@@ -52,6 +72,16 @@ public class LineController : MonoBehaviour
     }
     private Vector2 GetScreenPoint()
     {
-       return Camera.main.ScreenToWorldPoint(_input.InputPosition);
+        return Camera.main.ScreenToWorldPoint(_input.InputPosition);
+    }
+    public void Continue()
+    {
+        foreach (var drawedLine in currentDrawedLine)
+        {
+            LinePool.Instance.Set(drawedLine);
+        }
+        currentDrawedLine.Clear();
+        _currentDrawLineCount = _maxDrawLine;
+        OnDrawLine?.Invoke(_currentDrawLineCount);
     }
 }

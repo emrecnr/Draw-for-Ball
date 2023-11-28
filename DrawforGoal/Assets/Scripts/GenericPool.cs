@@ -32,6 +32,7 @@ public abstract class GenericPool<T> : MonoBehaviour where T : Component
     {
         poolObject.gameObject.SetActive(false);
         _pool.Enqueue(poolObject);
+        
     }
 
     private void GrowPoolPrefab()
@@ -39,6 +40,7 @@ public abstract class GenericPool<T> : MonoBehaviour where T : Component
         for (int i = 0; i < poolSize; i++)
         {
             T newPrefab = Instantiate(_prefabs[Random.Range(0, _prefabs.Length)]);
+            newPrefab.transform.parent = transform; 
             newPrefab.gameObject.SetActive(false);
             _pool.Enqueue(newPrefab);
         }
