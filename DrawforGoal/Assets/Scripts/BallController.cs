@@ -9,8 +9,9 @@ public class BallController : MonoBehaviour
         if (collision.gameObject.CompareTag("DestroyArea"))
         {
             BackToPool();
-            GameManager.Instance.canStart = false;
+            GameManager.Instance.canStart = false;            
             UIManager.Instance.GameOver();
+            GameManager.Instance.GameOver();
         }
     }
     public void BackToPool()

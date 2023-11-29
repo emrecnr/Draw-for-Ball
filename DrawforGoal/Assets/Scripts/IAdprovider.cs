@@ -7,8 +7,8 @@ public interface IAdprovider
 {
     bool IsRewardedAdReady { get; }
     void InitializeAd();
+    void LoadAd();  
     void ShowRewarded(Action onRewarded, Action onQuitted);
-    void ShowIntersitialAd();
 }
 
 

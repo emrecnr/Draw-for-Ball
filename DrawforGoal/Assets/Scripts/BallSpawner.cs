@@ -23,7 +23,10 @@ public class BallSpawner : MonoBehaviour
         StartCoroutine(BallSpawn());
     }
 
-
+    private void Update()
+    {
+        
+    }
     private void Spawn()
     {
         ball = BallPool.Instance.Get();
@@ -39,13 +42,14 @@ public class BallSpawner : MonoBehaviour
     }
     private void CheckVelocity()
     {
-        if (_rigidbody.velocity == Vector2.zero)
+        if (_rigidbody!=null&&_rigidbody.velocity == Vector2.zero)
         {
             _timer -= Time.deltaTime;
             if (_timer <= 0)
             {
                 GameManager.Instance.canStart = false;
                 UIManager.Instance.GameOver();
+                GameManager.Instance.GameOver();
             }
         }
     }
@@ -70,6 +74,7 @@ public class BallSpawner : MonoBehaviour
             }
             else
             {
+                CheckVelocity();
                 yield return null;
             }
         }

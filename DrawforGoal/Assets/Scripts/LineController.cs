@@ -41,10 +41,15 @@ public class LineController : MonoBehaviour
             if (Vector2.Distance(touchPosition, touchPositionList[^1]) > .1f)
                 UpdateLine(touchPosition);
         }
+        if (_input.InputButtonUp)
+        {
+            AudioManager.Instance.PlayDrawSFX(false);
+        }
     }
     private void DrawLine()
     {
         if (_maxDrawLine <= 0) return;
+
         _currentDrawLineCount--;
         OnDrawLine?.Invoke(_currentDrawLineCount);
         
@@ -65,6 +70,7 @@ public class LineController : MonoBehaviour
     }
     private void UpdateLine(Vector2 getTouchPosition)
     {
+        AudioManager.Instance.PlayDrawSFX(true);
         touchPositionList.Add(getTouchPosition);
         lineRenderer.positionCount++;
         lineRenderer.SetPosition(lineRenderer.positionCount - 1, getTouchPosition);

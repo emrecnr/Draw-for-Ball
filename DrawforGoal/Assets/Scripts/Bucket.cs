@@ -13,6 +13,7 @@ public class Bucket : MonoBehaviour
         if (collision.CompareTag("Ball"))
         {
            OnScore?.Invoke();
+            AudioManager.Instance.PlayScoreSFX();
         }
     }
 

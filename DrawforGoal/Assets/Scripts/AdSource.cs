@@ -37,6 +37,7 @@ public class AdSource : MonoBehaviour
                 break;
 
             case AdProviders.AdMob:
+                currentProvider = new AdmobProvider();
                 break;
             case AdProviders.TestProvider:
                 currentProvider = new TestAdProvider();

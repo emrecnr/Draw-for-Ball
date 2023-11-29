@@ -29,4 +29,9 @@ public class TestAdProvider : IAdprovider
     {
        // Show Intersitial Ad
     }
+
+    public void LoadAd()
+    {
+        
+    }
 }

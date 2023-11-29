@@ -10,10 +10,13 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
     [SerializeField] LineController lineController;
     [SerializeField] private TMP_Text _currentDrawLine;
-    [Header("--- BUTTONS START PANEL ---")]
+    [Header("--- START PANEL ---")]
     [SerializeField] Button startButton;
     [SerializeField] Button leaderButton;
     [SerializeField] Button quitButton;
+    public TMP_Text bestScoreText;
+    [Header("--- GAME PANEL---")]
+    public TMP_Text _currentScoreText;
     [Header("--- BUTTONS GAME OVER PANEL ---")]
     public Button adButton;
     [SerializeField] Button retryButton;
@@ -26,10 +29,14 @@ public class UIManager : MonoBehaviour
     [Header("--- HELPERS ---")]
     [SerializeField] TMP_Text _startCountDown;
 
- 
+    
     private void Awake()
     {
         Instance = this;
+    }
+    private void Start()
+    {
+        bestScoreText.text = "BEST SCORE\n" + GameManager.Instance.bestScore.ToString();
     }
     private void OnEnable()
     {
@@ -51,6 +58,7 @@ public class UIManager : MonoBehaviour
     public void ContinueGameWithAds()
     {
         _gameOverPanel.SetActive(false);
+        adButton.gameObject.SetActive(false);
         StartCoroutine(StartCountdown());
     }
     private void QuitGame()
@@ -70,7 +78,7 @@ public class UIManager : MonoBehaviour
             startCount--;
         }
         GameManager.Instance.canStart = true;
-        _startCountDown.text = "Go!";
+        _startCountDown.text = "Draw!";
         yield return new WaitForSeconds(.5f);
         _gamePanel.SetActive(true);
         _startCountDown.gameObject.SetActive(false);
