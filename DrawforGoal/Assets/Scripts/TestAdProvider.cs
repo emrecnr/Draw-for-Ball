@@ -22,7 +22,7 @@ public class TestAdProvider : IAdprovider
     {
         // Show Rewarded Ad
         onRewarded?.Invoke();
-        Debug.Log("Test Reklamý Gösterildi");
+
     }
 
     public void ShowIntersitialAd()

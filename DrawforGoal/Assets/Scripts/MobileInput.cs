@@ -10,5 +10,5 @@ public class MobileInput : IInput
 
     public Vector2 InputPosition => Input.GetTouch(0).position;
 
-    public bool InputButtonUp => throw new System.NotImplementedException();
+    public bool InputButtonUp => Input.GetButtonUp("Mouse1");
 }
